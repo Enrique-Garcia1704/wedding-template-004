@@ -9,15 +9,30 @@ import GiftSection from '../components/GiftSection.astro';
 import RSVPSection from '../components/RSVPSection.astro';
 import LocationSection from '../components/LocationSection.astro';
 import TimelineSection from '../components/TimelineSection.astro';
+
+
+
+
+import { fetchIndexData } from '../lib/services/index.ts';
+
+export const prerender = false;
+
+const id = Astro.url.searchParams.get("id");
+const indexData = id ? await fetchIndexData(id) : null;
+
+
+indexData?.detalle_evento?.[0]?.nombre_pareja1
+indexData?.fecha_evento
+
 ---
 
 <Layout>
-	<HeroSection />
-	<CountdownSection />
+	<HeroSection  nombreNovia={indexData?.detalle_evento?.[0]?.nombre_pareja1} nombreNovio={indexData?.detalle_evento?.[0]?.nombre_pareja2} />
+	<CountdownSection fecha={indexData?.fecha_evento} />
 	<TimelineSection />
-	<DetailsSection />
-	<LocationSection />
+	<DetailsSection fecha={indexData?.fecha_evento} lugar={indexData?.detalle_evento?.[0]?.lugar} />
+	<LocationSection lugar={indexData?.detalle_evento?.[0]?.lugar} />
 	<GiftSection />
 	<RSVPSection />
-	<FooterSection />
+	<FooterSection nombreNovia={indexData?.detalle_evento?.[0]?.nombre_pareja1} nombreNovio={indexData?.detalle_evento?.[0]?.nombre_pareja2} />
 </Layout>

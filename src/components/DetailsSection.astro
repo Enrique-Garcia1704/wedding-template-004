@@ -1,35 +1,56 @@
 ---
-const details = [
-  {
-    icon: "calendar",
-    title: "Fecha",
-    info: "20 de Junio, 2026",
-  },
-  {
-    icon: "clock",
-    title: "Hora",
-    info: "5:00 PM",
-    sub: "Favor de llegar 30 min antes",
-  },
-  {
-    icon: "map-pin",
-    title: "Lugar",
-    info: "Jardín La Rosa de Cristal",
-    sub: "Av. Reforma 452, Col. Centro",
-  },
-  {
-    icon: "shirt",
-    title: "Código de Vestimenta",
-    info: "Formal / Elegante",
-    sub: "Colores pasteles bienvenidos 🌈",
-  },
-];
+interface HeroData {
+  nombreNovia: string;
+  nombreNovio: string;
+  fecha: string;
+  lugar: string;
+}
 
-const icons: Record<string, string> = {
-  calendar: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
-  clock: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
-  "map-pin": `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
-  shirt: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>`,
+const { fecha, lugar } = Astro.props as HeroData;
+
+const fechaDate = fecha ? new Date(fecha) : null;
+
+// Fecha: "20 de junio de 2026"
+const fechaMostrar = fechaDate
+  ? fechaDate.toLocaleDateString("es-MX", {
+      timeZone: "America/Mexico_City",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+  : "";
+
+// Hora: "5:00 PM"
+const horaMX = fechaDate
+  ? fechaDate.toLocaleTimeString("es-MX", {
+      timeZone: "America/Mexico_City",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+  : "";
+
+const icons = {
+  calendar: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+    <line x1="16" y1="2" x2="16" y2="6"/>
+    <line x1="8" y1="2" x2="8" y2="6"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+  </svg>`,
+
+  clock: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <polyline points="12 6 12 12 16 14"/>
+  </svg>`,
+
+  map: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+    <circle cx="12" cy="10" r="3"/>
+  </svg>`,
+
+  shirt: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
+  </svg>`,
 };
 ---
 
@@ -37,34 +58,79 @@ const icons: Record<string, string> = {
   <h2 class="font-display text-3xl md:text-4xl text-center text-foreground mb-2 animate-fade-in">
     Detalles del Evento
   </h2>
+
   <div class="flex justify-center mb-10">
     <div class="h-[2px] w-20 rounded-full rainbow-border"></div>
   </div>
 
   <div class="max-w-md mx-auto space-y-6">
-    {details.map((item, i) => (
-      <div
-        class="flex items-start gap-4 bg-card rounded-lg p-5 border border-border shadow-sm animate-fade-up"
-        style={`animation-delay: ${i * 0.15}s`}
-      >
-        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary">
-          <Fragment set:html={icons[item.icon]} />
-        </div>
-        <div>
-          <p class="font-body text-xs tracking-[0.15em] uppercase text-muted-foreground">
-            {item.title}
-          </p>
-          <p class="font-elegant text-xl text-foreground font-semibold">
-            {item.info}
-          </p>
-          {item.sub && (
-            <p class="font-body text-sm text-muted-foreground mt-0.5">
-              {item.sub}
-            </p>
-          )}
-        </div>
+
+    <!-- FECHA -->
+    <div class="flex items-start gap-4 bg-card rounded-lg p-5 border border-border shadow-sm animate-fade-up">
+      <div class="flex-shrink-0 w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary">
+        <Fragment set:html={icons.calendar} />
       </div>
-    ))}
+      <div>
+        <p class="font-body text-xs tracking-[0.15em] uppercase text-muted-foreground">
+          Fecha
+        </p>
+        <p class="font-elegant text-xl text-foreground font-semibold">
+          {fechaMostrar || "Fecha por confirmar"}
+        </p>
+      </div>
+    </div>
+
+    <!-- HORA -->
+    <div class="flex items-start gap-4 bg-card rounded-lg p-5 border border-border shadow-sm animate-fade-up">
+      <div class="flex-shrink-0 w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary">
+        <Fragment set:html={icons.clock} />
+      </div>
+      <div>
+        <p class="font-body text-xs tracking-[0.15em] uppercase text-muted-foreground">
+          Hora
+        </p>
+        <p class="font-elegant text-xl text-foreground font-semibold">
+          {horaMX || "Hora por confirmar"}
+        </p>
+        <p class="font-body text-sm text-muted-foreground mt-0.5">
+          Favor de llegar 30 min antes
+        </p>
+      </div>
+    </div>
+
+    <!-- LUGAR -->
+    <div class="flex items-start gap-4 bg-card rounded-lg p-5 border border-border shadow-sm animate-fade-up">
+      <div class="flex-shrink-0 w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary">
+        <Fragment set:html={icons.map} />
+      </div>
+      <div>
+        <p class="font-body text-xs tracking-[0.15em] uppercase text-muted-foreground">
+          Lugar
+        </p>
+        <p class="font-elegant text-xl text-foreground font-semibold">
+          {lugar || "Lugar por confirmar"}
+        </p>
+      </div>
+    </div>
+
+    <!-- VESTIMENTA -->
+    <div class="flex items-start gap-4 bg-card rounded-lg p-5 border border-border shadow-sm animate-fade-up">
+      <div class="flex-shrink-0 w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary">
+        <Fragment set:html={icons.shirt} />
+      </div>
+      <div>
+        <p class="font-body text-xs tracking-[0.15em] uppercase text-muted-foreground">
+          Código de Vestimenta
+        </p>
+        <p class="font-elegant text-xl text-foreground font-semibold">
+          Formal / Elegante
+        </p>
+        <p class="font-body text-sm text-muted-foreground mt-0.5">
+          Colores pasteles bienvenidos 🌈
+        </p>
+      </div>
+    </div>
+
   </div>
 </section>
 

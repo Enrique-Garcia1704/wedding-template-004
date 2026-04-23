@@ -1,5 +1,26 @@
 ---
 
+interface HeroData {
+  nombreNovia: string;
+  nombreNovio: string;
+}
+
+const { nombreNovia, nombreNovio } = Astro.props as HeroData;
+
+// Función para obtener iniciales (soporta nombres compuestos)
+const getIniciales = (nombre: string | undefined) => {
+  if (!nombre) return "";
+  return nombre
+    .trim()
+    .split(/\s+/)
+    .map(n => n[0])
+    .join("")
+    .toUpperCase();
+};
+
+const inicialNovia = getIniciales(nombreNovia);
+const inicialNovio = getIniciales(nombreNovio);
+
 ---
 
 <section class="py-12 px-6 text-center relative overflow-hidden animate-fade-in">
@@ -10,7 +31,7 @@
     Con todo nuestro amor 🌈
   </p>
   <p class="font-display text-4xl md:text-5xl text-foreground">
-    V &amp; C
+    {inicialNovia} &amp; {inicialNovio}
   </p>
   <p class="font-body text-[10px] text-muted-foreground mt-6 tracking-wider uppercase">
     #ValYCaro2026
